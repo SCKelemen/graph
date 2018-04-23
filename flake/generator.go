@@ -1,22 +1,29 @@
 package flake
 
-import "time"
+import (
+	"sync"
+	"time"
+)
 
 func NewGenerator(worker uint16, process uint8) Generator {
 	return Generator{Worker: worker, Process: process, Sequence: 0}
 }
 
 type Generator struct {
-	mutex    Sync.mutex
+	mutex    sync.Mutex
 	Sequence uint8
 	Worker   uint16
 	Process  uint8
 }
 
 func (g Generator) Generate() Flake {
-	now := time.Now().Unix()
-	time := now - Epoch
-	return Flake{TimeStamp: time, WorkerID: g.Worker, ProcessID: g.Process, SequenceID: g.increment}
+	now := time.Now()
+	seq := g.increment()
+	return Flake{
+		TimeStamp:  now,
+		WorkerID:   g.Worker,
+		ProcessID:  g.Process,
+		SequenceID: seq}
 }
 
 func (g Generator) increment() uint8 {

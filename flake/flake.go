@@ -40,28 +40,29 @@ type Flake struct {
 func (f Flake) Int64() int64 {
 	timestamp := f.TimeStamp.Unix() - Epoch
 	output := timestamp << f.WorkerID << f.ProcessID << f.SequenceID
-	return output.(int64)
+	return output
 }
 
-type gflake int
+//type gflake int64
+type gflake int64
 
 func GetTimeStamp(id gflake) time.Time {
-	timebits := (id >> TimeStampOffset) + Epoch
+	timebits := int64((id >> TimeStampOffset) + Epoch)
 	stamp := time.Unix(timebits, 0)
 	return stamp
 }
 
-func GetWorkerId(id gflake) int {
+func GetWorkerId(id gflake) uint16 {
 	worker := (id & WorkerIDMask) >> WorkIDOffset
-	return worker
+	return uint16(worker)
 }
 
-func GetProcessId(id gflake) int {
+func GetProcessId(id gflake) uint8 {
 	process := (id & ProcessIDMask) >> ProcessIDOffset
-	return process
+	return uint8(process)
 }
 
-func GetSequenceId(id gflake) int {
+func GetSequenceId(id gflake) uint8 {
 	sequence := id & SequenceIDMask
-	return sequence
+	return uint8(sequence)
 }
