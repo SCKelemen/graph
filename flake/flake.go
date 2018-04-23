@@ -37,32 +37,44 @@ type Flake struct {
 	SequenceID uint8
 }
 
+// Int64 returns the Flake as an Int64
 func (f Flake) Int64() int64 {
 	timestamp := f.TimeStamp.Unix() - Epoch
+	// todo: actually make this math correct
 	output := timestamp << f.WorkerID << f.ProcessID << f.SequenceID
 	return output
 }
 
-//type gflake int64
+//
+// this schema probably won't work on Javascript because it mishandles
+// integers greater than   54 bits
 type gflake int64
 
+// GetTimeStamp takes a uint64  Flake ID
+// and decodes the timestamp from it
 func GetTimeStamp(id gflake) time.Time {
 	timebits := int64((id >> TimeStampOffset) + Epoch)
 	stamp := time.Unix(timebits, 0)
 	return stamp
 }
 
-func GetWorkerId(id gflake) uint16 {
+// GetWorkerID decodes the workerID from
+// the flake and returns it as a uint16
+func GetWorkerID(id gflake) uint16 {
 	worker := (id & WorkerIDMask) >> WorkIDOffset
 	return uint16(worker)
 }
 
-func GetProcessId(id gflake) uint8 {
+// GetProcessID decodes the ProcessID from
+// the flake and returns it as a uint8
+func GetProcessID(id gflake) uint8 {
 	process := (id & ProcessIDMask) >> ProcessIDOffset
 	return uint8(process)
 }
 
-func GetSequenceId(id gflake) uint8 {
+// GetSequenceID decodes the SequenceID from
+// the flake and returns it as a uint8
+func GetSequenceID(id gflake) uint8 {
 	sequence := id & SequenceIDMask
 	return uint8(sequence)
 }
