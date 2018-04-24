@@ -31,17 +31,45 @@ const (
 // 64 TimeStamp                               22 WorkerID    10 PID 6 SeqID
 // 012345678901234567890123456789012345678901 | 234567890123 | 4567 | 890123
 type Flake struct {
-	TimeStamp  time.Time
-	WorkerID   uint16
-	ProcessID  uint8
-	SequenceID uint8
+	timestamp  time.Time
+	workerID   uint16
+	processID  uint8
+	sequenceID uint8
+}
+
+// IFlake is an interface for the flake
+type IFlake interface {
+	TimeStamp() time.Time
+	WorkerID() uint16
+	ProcessID() uint8
+	SequenceID() uint8
+}
+
+// TimeStamp returns the flake's timestamp
+func (f Flake) TimeStamp() time.Time {
+	return f.timestamp
+}
+
+// WorkerID returns the flake's workerid
+func (f Flake) WorkerID() uint16 {
+	return f.workerID
+}
+
+// ProcessID returns the flake's processid
+func (f Flake) ProcessID() uint8 {
+	return f.processID
+}
+
+// SequenceID returns the flake's sequenceid
+func (f Flake) SequenceID() uint8 {
+	return f.sequenceID
 }
 
 // Int64 returns the Flake as an Int64
 func (f Flake) Int64() int64 {
-	timestamp := f.TimeStamp.Unix() - Epoch
+	timestamp := f.timestamp.Unix() - Epoch
 	// todo: actually make this math correct
-	output := timestamp << f.WorkerID << f.ProcessID << f.SequenceID
+	output := timestamp << f.workerID << f.processID << f.sequenceID
 	return output
 }
 
