@@ -3,10 +3,13 @@ package flake
 import "time"
 
 const (
-	TimeStampLength = 42 // a bunch
-	WorkerIDLength  = 12 // 4096
-	ProcessIDLength = 4  // 16
-	SequenceLength  = 6  // 64
+	TimeStampLength = 42 // a bunch - might want to remove the sign bit and throw it away
+
+	WorkerIDLength = 12 // 4096 - workerid might not make sense here
+	// as the machine ID will also be a flake.
+
+	ProcessIDLength = 4 // 16
+	SequenceLength  = 6 // 64
 
 	Epoch = 1514764800 // 01/01/2018 @ 12:00am (UTC)
 
@@ -43,6 +46,7 @@ type IFlake interface {
 	WorkerID() uint16
 	ProcessID() uint8
 	SequenceID() uint8
+	Int64() int64
 }
 
 // TimeStamp returns the flake's timestamp

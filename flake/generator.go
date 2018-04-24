@@ -20,10 +20,10 @@ func (g Generator) Generate() Flake {
 	now := time.Now()
 	seq := g.increment()
 	return Flake{
-		TimeStamp:  now,
-		WorkerID:   g.Worker,
-		ProcessID:  g.Process,
-		SequenceID: seq}
+		timestamp:  now,
+		workerID:   g.Worker,
+		processID:  g.Process,
+		sequenceID: seq}
 }
 
 func (g Generator) increment() uint8 {
