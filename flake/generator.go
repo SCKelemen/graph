@@ -33,3 +33,7 @@ func (g Generator) increment() uint8 {
 	g.Sequence++
 	return g.Sequence
 }
+
+func newGenerator(worker uint16, process uint8) Generator {
+	return Generator{Worker: worker, Process: process, Sequence: 0}
+}
