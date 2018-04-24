@@ -29,6 +29,7 @@ func (g Generator) Generate() Flake {
 func (g Generator) increment() uint8 {
 	g.mutex.Lock()
 	defer g.mutex.Unlock()
+	// todo: make Sequence a private member, so this can't be modified outside of the interlock.
 	g.Sequence++
 	return g.Sequence
 }
