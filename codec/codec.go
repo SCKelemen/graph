@@ -6,10 +6,9 @@ import (
 )
 
 type Codec struct {
-	Alphabet  CodecAlphabet
-	Padding   CodecPad
-	shouldPad bool
-	safe      bool
+	Alphabet CodecAlphabet
+	Padding  CodecPad
+	safe     bool
 }
 
 func NewCodec(base int) ICodec {

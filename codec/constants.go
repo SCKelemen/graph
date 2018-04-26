@@ -14,4 +14,6 @@ const (
 	Base32ExtendedHexPad CodecPad = '='
 	Base64Pad            CodecPad = '='
 	Base64UrlPad         CodecPad = '='
+	StandardPadding      CodecPad = '='
+	NoPadding            CodecPad = -1
 )
