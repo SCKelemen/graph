@@ -6,8 +6,10 @@ import (
 )
 
 type Codec struct {
-	Alphabet CodecAlphabet
-	Padding  CodecPad
+	Alphabet  CodecAlphabet
+	Padding   CodecPad
+	shouldPad bool
+	safe      bool
 }
 
 func NewCodec(base int) ICodec {
@@ -68,4 +70,30 @@ func (c Codec) Decode(token string) int {
 	}
 
 	return number
+}
+
+type option func(*Codec)
+
+func (c *Codec) Option(opts ...option) {
+	for _, opt := range opts {
+		opt(c)
+	}
+}
+
+func PadChar(char rune) option {
+	return func(c *Codec) {
+		c.Padding = CodecPad(char)
+	}
+}
+
+func Pad(pad bool) option {
+	return func(c *Codec) {
+		c.shouldPad = pad
+	}
+}
+
+func URLSafe(safe bool) option {
+	return func(c *Codec) {
+		c.safe = safe
+	}
 }
