@@ -13,8 +13,8 @@ const (
 
 	Epoch = 1514764800 // 01/01/2018 @ 12:00am (UTC)
 
-	WorkerIDMask   = 0
-	ProcessIDMask  = 0
+	WorkerIDMask   = 0x3FFC00
+	ProcessIDMask  = 0x3C0
 	SequenceIDMask = 0x3F
 
 	TimeStampOffset = 22
@@ -110,3 +110,26 @@ func GetSequenceID(id gflake) uint8 {
 	sequence := id & SequenceIDMask
 	return uint8(sequence)
 }
+
+/*
+unsigned
+1111111111 1111111111 1111111111 1111111111 1111111111 1111111111 1111
+tttttttttt tttttttttt tttttttttt tttttttttt ttwwwwwwww wwwwppppss ssss
+time mask = 0xFFFFFFFFFFC00000
+1111111111 1111111111 1111111111 1111111111 1100000000 0000000000 0000
+worker mask = 0x3FFC00
+0000000000 0000000000 0000000000 0000000000 0011111111 1111000000 0000
+tttttttttt tttttttttt tttttttttt tttttttttt ttwwwwwwww wwwwppppss ssss
+
+process mask = 0x3C0
+0000000000 0000000000 0000000000 0000000000 0000000000 0000111100 0000
+tttttttttt tttttttttt tttttttttt tttttttttt ttwwwwwwww wwwwppppss ssss
+sequence mask = 0x3F
+0000000000 0000000000 0000000000 0000000000 0000000000 0000000011 1111
+tttttttttt tttttttttt tttttttttt tttttttttt ttwwwwwwww wwwwppppss ssss
+
+0xFFFFFFFFFFFFFFFF // max unsigned int64
+
+
+0x7FFFFFFFFFFFFFFF // max signed int64
+*/
